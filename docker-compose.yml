@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: miniledger-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-miniledger}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-miniledger_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-miniledger}
+      TZ: Asia/Kolkata
+      PGTZ: Asia/Kolkata
+    command: ["postgres", "-c", "timezone=Asia/Kolkata"]
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - miniledger_postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init/001-create-test-db.sql:/docker-entrypoint-initdb.d/001-create-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-miniledger} -d ${POSTGRES_DB:-miniledger}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  miniledger_postgres_data:

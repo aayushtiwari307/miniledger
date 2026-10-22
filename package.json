@@ -1,0 +1,25 @@
+{
+  "name": "miniledger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MiniLedger internship assignment",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "workspaces": [
+    "apps/api",
+    "apps/mobile"
+  ],
+  "scripts": {
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "dev:api": "npm run dev --workspace=@miniledger/api",
+    "dev:mobile": "npm run start --workspace=@miniledger/mobile",
+    "test": "npm run test --workspace=@miniledger/api && npm run test:mobile-utils",
+    "typecheck": "npm run typecheck --workspace=@miniledger/api && npm run typecheck --workspace=@miniledger/mobile",
+    "build:api": "npm run build --workspace=@miniledger/api",
+    "db:migrate": "npm run migrate --workspace=@miniledger/api",
+    "test:mobile-utils": "vitest run --config apps/api/vitest.config.ts apps/mobile/src/format.test.ts",
+    "setup:env": "node scripts/setup-env.mjs"
+  }
+}
