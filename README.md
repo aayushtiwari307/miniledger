@@ -179,15 +179,21 @@ Unknown routes return `404`. Invalid JSON returns `400`, and JSON request bodies
 6. Mark the loan as repaid, confirm the action in the app, and verify that overdue decreases while total repaid increases.
 7. Log out and sign in with a different phone number to demonstrate per-user data isolation.
 
-## Pre-submission verification checklist
+## Verification performed
 
-- [ ] Install from a clean checkout with `npm ci` after committing `package-lock.json`.
-- [ ] Run `npm run typecheck`, `npm run build:api`, and `npm test`.
-- [ ] Run PostgreSQL integration tests against `miniledger_test`.
-- [ ] Export the Android bundle and launch the app on the intended demo device.
-- [ ] Complete the full login → create loan → overdue status → repayment flow.
-- [ ] Confirm the GitHub repository contains no `.env` files, real secrets, or OTP values.
+The following checks were run locally on 22 October 2026:
 
+- [x] `npm run typecheck` — API and mobile.
+- [x] `npm run build:api`.
+- [x] `npm test` — 5 mobile formatting tests passed.
+- [x] `npm run test --workspace=@miniledger/api` — 57 backend tests passed.
+- [x] `npx expo export --platform android`.
+- [x] Physical Android flow: OTP login, create an overdue loan, verify summary updates, and mark the loan repaid.
+- [x] API health check reported `status: ok` and `database: connected`.
+- [x] API production dependency audit reported zero vulnerabilities.
+- [ ] Clean-clone installation with `npm ci` — not yet performed.
+
+The full dependency audit reports 15 high-severity findings in the Expo/Metro dependency tree. `npm audit fix --force` was not used because npm proposes an incompatible Expo SDK downgrade. Recheck for compatible fixes during dependency maintenance.
 ## Project layout
 
 ```text
